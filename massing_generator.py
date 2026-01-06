@@ -118,7 +118,7 @@ def create_architectural_floor_plate(building: BuildingSpec, output_path: str = 
 
     # --- UNITS ---
     units = []
-    unit_depth = 26  # Standard residential depth
+    unit_depth = 38  # Extended depth - units reach towards center
     setback = 5  # Edge setback
     party_wall = 1  # Between units
 
@@ -196,36 +196,32 @@ def create_architectural_floor_plate(building: BuildingSpec, output_path: str = 
 
     # --- WEST WING (left side, between N and S wings) ---
     x = setback
-    y_start = setback + unit_depth + party_wall
-    y_end = floor_ft - setback - unit_depth - party_wall
+    y_start = setback + unit_depth + party_wall + door_gap  # Account for door gaps
+    y_end = floor_ft - setback - unit_depth - party_wall - door_gap
     available_height = y_end - y_start
 
     y = y_start
-    # Fill with units stacked vertically
-    place_unit("1BR", x, y, unit_depth, 28)
-    y += 29
-    place_unit("Studio", x, y, unit_depth, 22)
-    y += 23
-    place_unit("1BR", x, y, unit_depth, 28)
-    y += 29
-    # Fill remaining space
+    # Fill with units stacked vertically - use available height
+    unit_h = (available_height - 3) // 3  # Divide into 3 units with gaps
+    place_unit("1BR", x, y, unit_depth, unit_h)
+    y += unit_h + 1
+    place_unit("Studio", x, y, unit_depth, unit_h)
+    y += unit_h + 1
     remaining_h = y_end - y
     if remaining_h > 15:
-        place_unit("Studio", x, y, unit_depth, remaining_h)
+        place_unit("1BR", x, y, unit_depth, remaining_h)
 
     # --- EAST WING (right side) ---
-    x = floor_ft - setback - unit_depth  # Start from right edge minus unit depth
+    x = floor_ft - setback - unit_depth
     y = y_start
 
-    place_unit("1BR", x, y, unit_depth, 28)
-    y += 29
-    place_unit("Studio", x, y, unit_depth, 22)
-    y += 23
-    place_unit("1BR", x, y, unit_depth, 28)
-    y += 29
+    place_unit("1BR", x, y, unit_depth, unit_h)
+    y += unit_h + 1
+    place_unit("Studio", x, y, unit_depth, unit_h)
+    y += unit_h + 1
     remaining_h = y_end - y
     if remaining_h > 15:
-        place_unit("Studio", x, y, unit_depth, remaining_h)
+        place_unit("1BR", x, y, unit_depth, remaining_h)
 
     # --- BOH (Back of House) spaces around core ---
     boh_color = (200, 200, 210)  # Light grayish blue for BOH
