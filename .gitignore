@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+.venv/
+
+# Model weights (too large for git)
+*.pt
+*.pth
+*.rar
+params.pkl
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Test artifacts
+test_output/
+test_mask.png
+test_mock_result.png
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
